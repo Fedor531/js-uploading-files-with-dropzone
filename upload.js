@@ -19,9 +19,13 @@ const element = (tag, classes = [], content) => {
   return node;
 };
 
+function noop () {
+}
+
 export function upload(selector, options = {}) {
   // Переменная для записи файлов
   let files = [];
+  const onUpload = options.onUpload ?? noop
   const input = document.querySelector(selector);
   const openButton = element('button', ['btn'], 'Открыть');
   const uploadButton = element('button', ['btn', 'primary'], 'Загрузить');
@@ -105,7 +109,11 @@ export function upload(selector, options = {}) {
     }
   };
 
-  const uploadHandler = () => {};
+    function uploadHandler() {
+        // Удалить крестики при загрузке
+    preview.querySelectorAll('.preview-remove').forEach(e => e.remove())
+    onUpload(files)
+  };
 
   // Собыите открытия окна загрузки
   openButton.addEventListener('click', triggerInput);
